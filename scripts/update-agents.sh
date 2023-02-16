@@ -4,6 +4,9 @@ set -x
 curl https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq
 chmod +x jq
 
+ls -altr 
+./jq . terraform.tfstate
+
 #fetch nodes from terraform.tfstate
 ./jq -r '.resources[] | select(.name=="ocp_node") | .instances[].attributes.name' terraform.tfstate > /tmp/res
 cat /tmp/res
