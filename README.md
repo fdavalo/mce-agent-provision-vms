@@ -20,6 +20,8 @@
 
 ## Use the Tekton Pipeline to create the Virtual Machine
    
+   The Pipeline is started and asking for a Workspace (persistent volume to share files between tasks), choose a volume claim template
+
    The Tekton pipeline consists of 3 steps :
 
 * Clone this git repository (fetch terraform template and bash scripts)
@@ -27,9 +29,6 @@
 * Use terraform to create the Virtual Machine (random name is used, a cdrom is used to boot the discovery iso)
 
 * A bash script will fetch Virtual Machine name and IP to update the Agent (approved=true, hostname=vm name)
-
-
-   The pipeline is started and asking for a workspace (persistent volume to share files between tasks), choose a volume claim template
 
 [![Pipeline to create the virtual machine](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/pipeline-vsphere.png?raw=true)](pipeline-vsphere.png)
 
