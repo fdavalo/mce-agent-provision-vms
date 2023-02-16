@@ -1,0 +1,68 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: provision-vsphere-nodes
+  namespace: hpe-redhat
+spec:
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: 'https://github.com/fdavalo/mce-agent-provision-vms'
+        - name: revision
+          value: main
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: crtFileName
+          value: ca-bundle.crt
+        - name: deleteExisting
+          value: 'true'
+        - name: verbose
+          value: 'true'
+        - name: gitInitImage
+          value: >-
+            gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2
+        - name: userHome
+          value: /home/git
+      taskRef:
+        kind: Task
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: data
+    - name: terraform-cli
+      params:
+        - name: ARGS
+          value:
+            - apply
+            - '-auto-approve'
+        - name: terraform-secret
+          value: terraform-vsphere-creds
+        - name: image
+          value: 'docker.io/hashicorp/terraform:light'
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: terraform-cli
+      workspaces:
+        - name: source
+          workspace: data
+    - name: scriptfile
+      params:
+        - name: file
+          value: scripts/update-agents.sh
+      runAfter:
+        - terraform-cli
+      taskRef:
+        kind: Task
+        name: scriptfile
+      workspaces:
+        - name: source
+          workspace: data
+  workspaces:
+    - name: data
