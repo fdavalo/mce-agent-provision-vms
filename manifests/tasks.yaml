@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: scriptfile
+  namespace: hpe-redhat
+spec:
+  params:
+    - description: The script file to execute
+      name: file
+      type: string
+  steps:
+    - command:
+        - /bin/bash
+        - $(inputs.params.file)
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      name: apply
+      resources: {}
+      workingDir: /workspace/source
+  workspaces:
+    - name: source
