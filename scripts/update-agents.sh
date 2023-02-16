@@ -4,12 +4,8 @@ set -x
 curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq
 chmod +x jq
 
-ls -altr 
-./jq . terraform.tfstate
-
 #fetch nodes from terraform.tfstate
 ./jq -r '.resources[] | select(.name=="ocp_node") | .instances[].attributes.name' terraform.tfstate > /tmp/res
-cat /tmp/res
 
 for node in `cat /tmp/res`; do 
   # fetch ip from terraform.tfstate
@@ -39,5 +35,5 @@ for node in `cat /tmp/res`; do
     fi
   done
   #update agent :  approved and set hostname
-  oc patch agent $agent -n baremetal -p '{"spec":{"approved":true, "hostname":"'$node'"}}'
+  oc patch agent $agent -n baremetal -p '{"spec":{"approved":true, "hostname":"'$node'"}}' --type=merge
 done
