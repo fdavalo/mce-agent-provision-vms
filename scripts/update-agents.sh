@@ -28,12 +28,12 @@ for node in `cat /tmp/res`; do
     cat /tmp/agents
   
     #fetch agent by ip
-    used=`grep $ip /tmp/agents | awk -F; '{if ($3!="") print "yes";}'`
+    used=`grep $ip /tmp/agents | awk -F\; '{if ($3!="") print "yes";}'`
     if [[ "$used" == "yes" ]]; then
        echo "agent found but already used in cluster"
        exit 1
     fi
-    agent=`grep $ip /tmp/agents | awk -F; '{print $1;}'`
+    agent=`grep $ip /tmp/agents | awk -F\; '{print $1;}'`
     if [[ "$agent" != "" ]]; then
      found="yes"
     fi
