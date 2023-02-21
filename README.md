@@ -28,6 +28,47 @@
 
 * Use terraform to create the Virtual Machine (random name is used, a cdrom is used to boot the discovery iso)
 
+               resource "vsphere_virtual_machine" "ocp_node" {
+                 #####
+                 # VM Specifications
+                 ####
+                 resource_pool_id = "${data.vsphere_compute_cluster.cluster.resource_pool_id}" 
+
+                 name      = "${lower(var.instance_name)}-node-${lower(random_string.suffix.result)}"
+                 num_cpus  = "${data.vsphere_virtual_machine.template.num_cpus}"
+                 memory    = "${data.vsphere_virtual_machine.template.memory}"
+
+                 scsi_controller_count = 1
+
+                 ####
+                 # Disk specifications
+                 ####
+                 datastore_id  = "${data.vsphere_datastore.datastore.id}"
+                 guest_id      = "${data.vsphere_virtual_machine.template.guest_id}"
+                 scsi_type     = "${data.vsphere_virtual_machine.template.scsi_type}"
+
+                 disk {
+                   label            = ""
+                   size             = "${data.vsphere_virtual_machine.template.disks.0.size}"
+                   eagerly_scrub    = "${data.vsphere_virtual_machine.template.disks.0.eagerly_scrub}"
+                   thin_provisioned = "${data.vsphere_virtual_machine.template.disks.0.thin_provisioned}"
+                   keep_on_remove   = false 
+                   unit_number      = 0
+                 }
+
+                 cdrom {
+                    datastore_id = "${data.vsphere_datastore.datastore.id}"
+                    path         = "ISOs/ocp1-baremetal-discovery.iso"
+                 }
+
+                 network_interface {
+                   network_id = data.vsphere_network.network.id
+                 }
+
+                 clone {
+                   template_uuid = "${data.vsphere_virtual_machine.template.id}"
+                 }
+
 * A bash script will fetch Virtual Machine name and IP to update the Agent (approved=true, hostname=vm name)
 
 [![Pipeline to create the virtual machine](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/pipeline-vsphere.png?raw=true)](pipeline-vsphere.png)
