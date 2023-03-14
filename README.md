@@ -79,3 +79,12 @@
    
 [![See the Host](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/agent-vsphere.png?raw=true)](agent-vsphere.png)
 
+
+## How to purge the environment
+
+    Destroy your clusters using the hosts first
+    
+    Then purge the hosts that were used by the cluster by starting the "purge-unbinded-vsphere-vms" pipeline in "hpe-redhat" namespace
+    
+    [![Purge Hosts](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/start-purge-unbinded-vms.png?raw=true)](start-purge-unbinded-vms.png)
+    
