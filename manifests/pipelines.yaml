@@ -66,3 +66,27 @@ spec:
           workspace: data
   workspaces:
     - name: data
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: purge-unbinded-vsphere-vms
+  namespace: hpe-redhat
+spec:
+  params:
+    - default: baremetal
+      name: infraenv
+      type: string
+  tasks:
+    - name: purge-unbinded-vsphere-vms
+      params:
+        - name: namespace
+          value: $(params.infraenv)
+      taskRef:
+        kind: Task
+        name: purge-unbinded-vsphere-vms
+      workspaces:
+        - name: result
+          workspace: result
+  workspaces:
+    - name: result
