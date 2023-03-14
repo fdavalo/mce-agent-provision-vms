@@ -1,0 +1,27 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: "vsphere-sdk" 
+  namespace: open-cluster-management
+spec:
+  output:
+    to:
+      kind: DockerImage
+      name: 'quay.io/fdavalo/vsphere-sdk:v1'
+    pushSecret:
+      name: fdavalo-fdavalo-robot-pull-secret
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: 'python:3.8'
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/fdavalo/mce-agent-provision-vms'
+      ref: 'main'
+    contextDir: 'src'
+    dockerfile: 'RUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git'
+  runPolicy: Serial
