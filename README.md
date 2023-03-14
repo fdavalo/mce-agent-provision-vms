@@ -86,5 +86,5 @@
     
     Then purge the hosts that were used by the cluster by starting the "purge-unbinded-vsphere-vms" pipeline in "hpe-redhat" namespace
     
-    [![Purge Hosts](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/start-purge-unbinded-vms.png?raw=true)](start-purge-unbinded-vms.png)
+[![Purge Hosts](https://github.com/fdavalo/mce-agent-provision-vms/blob/main/start-purge-unbinded-vms.png?raw=true)](start-purge-unbinded-vms.png)
     
