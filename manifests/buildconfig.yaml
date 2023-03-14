@@ -20,5 +20,5 @@ spec:
       uri: 'https://github.com/fdavalo/mce-agent-provision-vms'
       ref: 'main'
     contextDir: 'src'
-    dockerfile: "FROM image-registry.openshift-image-registry.svc:5000/openshift/python:3.8\nRUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git"
+    dockerfile: "FROM image-registry.openshift-image-registry.svc:5000/openshift/python:3.8\nRUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git\nCOPY vm-delete.py ."
   runPolicy: Serial
