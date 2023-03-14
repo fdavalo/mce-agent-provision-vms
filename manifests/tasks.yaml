@@ -37,7 +37,7 @@ spec:
 
         oc get agent -n $(inputs.params.namespace) -o=jsonpath='{range .items[*]}{.status.debugInfo.state}{" "}{.spec.hostname}{" "}{.metadata.name}{"\n"}{end}' > /workspace/result/vms
     - image: 'quay.io/fdavalo/vsphere-sdk:v1'
-      name: delete
+      name: delete-vms
       resources: {}
       script: >
         #!/usr/bin/env bash
@@ -69,7 +69,7 @@ spec:
               key: VSPHERE_PASSWORD
               name: terraform-vsphere-creds
     - image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
-      name: fetch
+      name: delete-agents
       resources: {}
       script: >
         #!/usr/bin/env bash
