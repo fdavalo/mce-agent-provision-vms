@@ -57,7 +57,7 @@ class DeleteVM(object):
         vms = self.client.vcenter.VM.list(VM.FilterSpec(names=names))
 
         if len(vms) == 0:
-            print("VM with name ({}) not found".format(vm_name))
+            print("VM with name ({}) not found".format(self.vm_name))
             return None
 
         vm = vms[0].vm
@@ -70,18 +70,16 @@ class DeleteVM(object):
         Delete User specified VM from Server
         """
         vm = self.get_vm()
-        if not vm:
-            raise Exception('Sample requires an existing vm with name ({}).'
-                            'Please create the vm first.'.format(self.vm_name))
-        print("Deleting VM -- '{}-({})')".format(self.vm_name, vm))
-        state = self.client.vcenter.vm.Power.get(vm)
-        if state == Power.Info(state=Power.State.POWERED_ON):
-            self.client.vcenter.vm.Power.stop(vm)
-        elif state == Power.Info(state=Power.State.SUSPENDED):
-            self.client.vcenter.vm.Power.start(vm)
-            self.client.vcenter.vm.Power.stop(vm)
-        self.client.vcenter.VM.delete(vm)
-        print("Deleted VM -- '{}-({})".format(self.vm_name, vm))
+        if vm is not None:
+            print("Deleting VM -- '{}-({})')".format(self.vm_name, vm))
+            state = self.client.vcenter.vm.Power.get(vm)
+            if state == Power.Info(state=Power.State.POWERED_ON):
+                self.client.vcenter.vm.Power.stop(vm)
+            elif state == Power.Info(state=Power.State.SUSPENDED):
+                self.client.vcenter.vm.Power.start(vm)
+                self.client.vcenter.vm.Power.stop(vm)
+            self.client.vcenter.VM.delete(vm)
+            print("Deleted VM -- '{}-({})".format(self.vm_name, vm))
 
 
 def main():
