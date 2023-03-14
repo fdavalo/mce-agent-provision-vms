@@ -11,17 +11,14 @@ spec:
     pushSecret:
       name: fdavalo-fdavalo-robot-pull-secret
   strategy:
-    type: Source
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        namespace: openshift
-        name: 'python:3.8'
+    dockerStrategy:
+      imageOptimizationPolicy: SkipLayers  
+    type: Docker
   source:
     type: Git
     git:
       uri: 'https://github.com/fdavalo/mce-agent-provision-vms'
       ref: 'main'
     contextDir: 'src'
-    dockerfile: 'RUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git'
+    dockerfile: 'FROM image-registry.openshift-image-registry.svc:5000/openshift/python\nRUN pip3 install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git'
   runPolicy: Serial
