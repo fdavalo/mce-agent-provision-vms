@@ -35,7 +35,7 @@ spec:
       script: >
         #!/usr/bin/env bash
 
-        oc get agent -n $(inputs.params.namespace) -o=jsonpath='{range .items[*]}{.status.debugInfo.state}{" "}{.spec.hostname}{"\n"}{end}' > /workspace/result/vms
+        oc get agent -n $(inputs.params.namespace) -o=jsonpath='{range .items[*]}{.status.debugInfo.state}{" "}{.spec.hostname}{" "}{.metadata.name}{"\n"}{end}' > /workspace/result/vms
     - image: 'quay.io/fdavalo/vsphere-sdk:v1'
       name: delete
       resources: {}
@@ -68,5 +68,20 @@ spec:
             secretKeyRef:
               key: VSPHERE_PASSWORD
               name: terraform-vsphere-creds
+    - image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      name: fetch
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        for agent in `cat /workspace/result/vms | awk '{if ($1=="unbinding-pending-user-action") print $3; else print "";}'`; do
+        
+          if [[ "$agent" != "" ]]; then 
+          
+            oc delete agent $agent -n $(inputs.params.namespace)
+            
+          fi
+          
+        done
   workspaces:
     - name: result
