@@ -13,3 +13,4 @@ rules:
       - list
       - patch
       - update
+      - delete
