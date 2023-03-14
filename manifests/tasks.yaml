@@ -18,3 +18,55 @@ spec:
       workingDir: /workspace/source
   workspaces:
     - name: source
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: purge-unbinded-vsphere-vms
+  namespace: hpe-redhat
+spec:
+  params:
+    - name: namespace
+      type: string
+  steps:
+    - image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      name: fetch
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        oc get agent -n $(inputs.params.namespace) -o=jsonpath='{range .items[*]}{.status.debugInfo.state}{" "}{.spec.hostname}{"\n"}{end}' > /workspace/result/vms
+    - image: 'quay.io/fdavalo/vsphere-sdk:v1'
+      name: delete
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        for vm in `cat /workspace/result/vms | awk '{if ($1=="unbinding-pending-user-action") print $2; else print "";}'`; do
+        
+          if [[ "$vm" != "" ]]; then 
+          
+            export VM_NAME=$vm
+            
+            python3 vm-delete.py
+            
+          fi
+        done
+      env:
+        - name: VSPHERE_SERVER
+          valueFrom:
+            secretKeyRef:
+              key: VSPHERE_SERVER
+              name: terraform-vsphere-creds
+        - name: VSPHERE_USER
+          valueFrom:
+            secretKeyRef:
+              key: VSPHERE_USER
+              name: terraform-vsphere-creds
+        - name: VSPHERE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: VSPHERE_PASSWORD
+              name: terraform-vsphere-creds
+  workspaces:
+    - name: result
