@@ -35,9 +35,8 @@ resource "vsphere_folder" "folder" {
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "ocp-template-ocp1"
+  name          = "OCP-NODES/ocp-template-ocp1"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
-  folder        = "${vsphere_folder.folder.path}"
 }
 
 resource "random_string" "suffix" {
