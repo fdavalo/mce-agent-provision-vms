@@ -70,7 +70,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: purge-unbinded-vsphere-vms
+  name: purge-unbound-vsphere-vms
   namespace: hpe-redhat
 spec:
   params:
