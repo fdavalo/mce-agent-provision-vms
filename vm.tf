@@ -31,6 +31,7 @@ data "vsphere_network" "network" {
 data "vsphere_virtual_machine" "template" {
   name          = "ocp-template-ocp1"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  folder        = "OCP-NODES"
 }
 
 resource "random_string" "suffix" {
@@ -46,6 +47,7 @@ resource "vsphere_virtual_machine" "ocp_node" {
   resource_pool_id = "${data.vsphere_compute_cluster.cluster.resource_pool_id}" 
 
   name      = "${lower(var.instance_name)}-node-${lower(random_string.suffix.result)}"
+  folder    = "OCP-NODES"
   num_cpus  = "${data.vsphere_virtual_machine.template.num_cpus}"
   memory    = "${data.vsphere_virtual_machine.template.memory}"
 
