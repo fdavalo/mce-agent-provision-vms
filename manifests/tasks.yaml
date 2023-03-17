@@ -22,7 +22,7 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: purge-unbinded-vsphere-vms
+  name: purge-unbound-vsphere-vms
   namespace: hpe-redhat
 spec:
   params:
@@ -42,7 +42,7 @@ spec:
       script: >
         #!/usr/bin/env bash
 
-        for vm in `cat /workspace/result/vms | awk '{if ($1=="unbinding-pending-user-action") print $2; else print "";}'`; do
+        for vm in `cat /workspace/result/vms | awk '{if (($1=="unbinding-pending-user-action")||($1=="known-unbound")) print $2; else print "";}'`; do
         
           if [[ "$vm" != "" ]]; then 
           
