@@ -80,4 +80,8 @@ resource "vsphere_virtual_machine" "ocp_node" {
   clone {
     template_uuid = "${data.vsphere_virtual_machine.template.id}"
   }
+
+  extra_config = {
+        "disk.EnableUUID" = "TRUE"
+  }
 }
