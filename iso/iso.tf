@@ -16,5 +16,3 @@ resource "vsphere_file" "iso_upload" {
   destination_file   = "/ISOs/${lower(var.instance_name)}.iso"
   create_directories = false
 }
-
-}
