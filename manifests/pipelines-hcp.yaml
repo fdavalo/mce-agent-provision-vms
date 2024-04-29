@@ -88,7 +88,7 @@ spec:
         - name: path
           value: vm1
         - name: template-path
-          value: tfs/vm.tf             
+          value: tfs/vm-hcp.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
@@ -110,7 +110,7 @@ spec:
         - name: path
           value: vm2
         - name: template-path
-          value: tfs/vm.tf             
+          value: tfs/vm-hcp.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
