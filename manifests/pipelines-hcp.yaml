@@ -64,9 +64,9 @@ spec:
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
         - name: path
-          value: terraform-iso
+          value: .
         - name: template-path
-          value: iso/iso.tf          
+          value: tfs/iso.tf          
       runAfter:
         - download-iso
       taskRef:
@@ -88,7 +88,7 @@ spec:
         - name: path
           value: vm1
         - name: template-path
-          value: vm.tf             
+          value: tfs/vm.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
@@ -110,7 +110,7 @@ spec:
         - name: path
           value: vm2
         - name: template-path
-          value: vm.tf             
+          value: tfs/vm.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
