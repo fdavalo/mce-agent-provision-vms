@@ -1,0 +1,94 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: terraform-cli-custom
+  namespace: hpe-redhat
+spec:
+  description: >-
+    Terraform is an open-source infrastructure as code software tool created by
+    HashiCorp.
+
+    It enables users to define and provision a datacenter infrastructure using a
+    high-level configuration language known as Hashicorp Configuration Language
+    (HCL), or optionally JSON
+
+    This Task will do a terraform init before it executes the actual configured
+    ARGS from parameter.
+  params:
+    - default:
+        - '--help'
+      description: The terraform cli commands to tun
+      name: ARGS
+      type: array
+    - default: terraform-creds
+      description: The terraform secret with credentials
+      name: terraform-secret
+      type: string
+    - default: 'docker.io/hashicorp/terraform:light'
+      description: the terraform image to use
+      name: image
+      type: string
+    - default: ''
+      description: path where to start terraform
+      name: path
+      type: string
+    - default: ''
+      description: template file path
+      name: template-path
+      type: string
+    - default: ''
+      description: HTTP proxy server for non-SSL requests
+      name: httpProxy
+      type: string
+    - default: ''
+      description: HTTPS proxy server for SSL requests
+      name: httpsProxy
+      type: string
+    - default: ''
+      description: no proxy - opt out of proxying HTTP/HTTPS requests
+      name: noProxy
+      type: string
+  steps:
+    - command:
+        - cp
+        - $(workspaces.source.path)/$(params.template-path)
+        - $(workspaces.source.path)
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      name: copy
+      resources: {}
+      workingDir: $(workspaces.source.path)/$(params.path)     
+    - args:
+        - init
+      command:
+        - terraform
+      env:
+        - name: HTTP_PROXY
+          value: $(params.httpProxy)
+        - name: HTTPS_PROXY
+          value: $(params.httpsProxy)
+        - name: HTTP_PROXY
+          value: $(params.httpProxy)
+      image: $(params.image)
+      name: init
+      resources: {}
+      workingDir: $(workspaces.source.path)/$(params.path)
+    - args:
+        - $(params.ARGS)
+      command:
+        - terraform
+      env:
+        - name: HTTP_PROXY
+          value: $(params.httpProxy)
+        - name: HTTPS_PROXY
+          value: $(params.httpsProxy)
+        - name: HTTP_PROXY
+          value: $(params.httpProxy)
+      envFrom:
+        - secretRef:
+            name: $(params.terraform-secret)
+      image: $(params.image)
+      name: terraform-cli
+      resources: {}
+      workingDir: $(workspaces.source.path)/$(params.path)
+  workspaces:
+    - name: source
