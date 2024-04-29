@@ -80,7 +80,9 @@ spec:
         - name: ARGS
           value:
             - apply
-            - '-auto-approve'
+            - -auto-approve
+            - -var
+            - instance-name=$(params.cluster)            
         - name: terraform-secret
           value: terraform-vsphere-creds
         - name: image
@@ -102,7 +104,9 @@ spec:
         - name: ARGS
           value:
             - apply
-            - '-auto-approve'
+            - -auto-approve
+            - -var
+            - instance-name=$(params.cluster)            
         - name: terraform-secret
           value: terraform-vsphere-creds
         - name: image
