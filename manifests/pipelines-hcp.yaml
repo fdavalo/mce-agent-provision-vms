@@ -127,6 +127,8 @@ spec:
       params:
         - name: file
           value: scripts/update-hcp-agents.sh
+        - name: arg
+          value: $(params.cluster)          
       runAfter:
         - terraform-cli-create-vm1
         - terraform-cli-create-vm2
