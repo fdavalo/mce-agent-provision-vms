@@ -52,7 +52,7 @@ spec:
     - command:
         - cp
         - $(workspaces.source.path)/$(params.template-path)
-        - $(workspaces.source.path)
+        - $(workspaces.source.path)/$(params.path)
       image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
       name: copy
       resources: {}
