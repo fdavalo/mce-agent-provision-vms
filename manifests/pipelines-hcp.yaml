@@ -38,6 +38,8 @@ spec:
       params:
         - name: file
           value: scripts/download-infraenv-iso.sh
+        - name: arg
+          value: ...          
       runAfter:
         - git-clone
       taskRef:
