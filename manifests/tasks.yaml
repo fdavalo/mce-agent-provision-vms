@@ -8,10 +8,15 @@ spec:
     - description: The script file to execute
       name: file
       type: string
+    - description: arg
+      default: ''
+      name: arg
+      type: string      
   steps:
     - command:
         - /bin/bash
         - $(inputs.params.file)
+        - $(inputs.params.arg)
       image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
       name: apply
       resources: {}
