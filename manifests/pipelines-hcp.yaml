@@ -44,11 +44,15 @@ spec:
           value: terraform-vsphere-creds
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
+        - name: path
+          value: terraform-iso
+        - name: template-path
+          value: iso/iso.tf          
       runAfter:
         - git-clone
       taskRef:
         kind: Task
-        name: terraform-cli
+        name: terraform-cli-custom
       workspaces:
         - name: source
           workspace: data          
@@ -62,11 +66,15 @@ spec:
           value: terraform-vsphere-creds
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
+        - name: path
+          value: terraform-vm1
+        - name: template-path
+          value: vm.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
         kind: Task
-        name: terraform-cli
+        name: terraform-cli-custom
       workspaces:
         - name: source
           workspace: data
@@ -80,11 +88,15 @@ spec:
           value: terraform-vsphere-creds
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
+        - name: path
+          value: terraform-vm2
+        - name: template-path
+          value: vm.tf             
       runAfter:
         - terraform-cli-upload-iso
       taskRef:
         kind: Task
-        name: terraform-cli
+        name: terraform-cli-custom
       workspaces:
         - name: source
           workspace: data          
