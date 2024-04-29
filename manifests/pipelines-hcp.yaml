@@ -82,7 +82,7 @@ spec:
             - apply
             - -auto-approve
             - -var
-            - instance-name=$(params.cluster)            
+            - instance_name=$(params.cluster)            
         - name: terraform-secret
           value: terraform-vsphere-creds
         - name: image
@@ -106,7 +106,7 @@ spec:
             - apply
             - -auto-approve
             - -var
-            - instance-name=$(params.cluster)            
+            - instance_name=$(params.cluster)            
         - name: terraform-secret
           value: terraform-vsphere-creds
         - name: image
