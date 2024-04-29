@@ -34,6 +34,18 @@ spec:
       workspaces:
         - name: output
           workspace: data
+    - name: download-iso
+      params:
+        - name: file
+          value: scripts/download-infraenv-iso.sh
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: scriptfile
+      workspaces:
+        - name: source
+          workspace: data          
     - name: terraform-cli-upload-iso
       params:
         - name: ARGS
@@ -45,11 +57,11 @@ spec:
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
         - name: path
-          value: terraform-iso
+          value: iso
         - name: template-path
           value: iso/iso.tf          
       runAfter:
-        - git-clone
+        - download-iso
       taskRef:
         kind: Task
         name: terraform-cli-custom
@@ -67,7 +79,7 @@ spec:
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
         - name: path
-          value: terraform-vm1
+          value: vm1
         - name: template-path
           value: vm.tf             
       runAfter:
@@ -89,7 +101,7 @@ spec:
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
         - name: path
-          value: terraform-vm2
+          value: vm2
         - name: template-path
           value: vm.tf             
       runAfter:
