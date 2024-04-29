@@ -44,11 +44,15 @@ spec:
           value: terraform-vsphere-creds
         - name: image
           value: 'docker.io/hashicorp/terraform:light'
+        - name: path
+          value: vm
+        - name: template-path
+          value: tfs/vm.tf              
       runAfter:
         - git-clone
       taskRef:
         kind: Task
-        name: terraform-cli
+        name: terraform-cli-custom
       workspaces:
         - name: source
           workspace: data
