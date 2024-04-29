@@ -10,4 +10,4 @@ chmod +x jq
 url=`oc get infraenv ${cluster} -n hcp-config -o=json | ./jq .status.isoDownloadURL`
 
 #download iso
-curl -k -o iso/infraenv.iso "$url"
+curl -k -o iso/infraenv.iso $url
