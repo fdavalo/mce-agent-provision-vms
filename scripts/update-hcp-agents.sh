@@ -7,6 +7,7 @@ path=`echo $1 | awk -F: '{print $2;}'`
 curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o jq
 chmod +x jq
 
+cat $path/terraform.tfstate
 #fetch nodes from terraform.tfstate
 ./jq -r '.resources[] | select(.name=="'${cluster}'_node") | .instances[].attributes.name' $path/terraform.tfstate > /tmp/res
 
